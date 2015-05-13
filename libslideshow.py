@@ -6,18 +6,22 @@ import shutil
 import pygame
 from string import split,join
 from pygame.locals import *
-
+from random import randrange, shuffle
+from string import split,join
+import os
+import urllib2
 
 # execute a shell command, printing it to the console for debugging purposes...
 def shellcmd(command):
 	print ' =>', command
 	os.system(command)
 
+# fill screen with a solid color...
 def fillscreen(screen, color):
 	screen.fill(color)
 	pygame.display.flip()
 
-
+# determine the location that centers an image...
 def center_loc(size, imagesize):
 	# screen size should always be >= imagesize, no checks here...
 	w, h = size
@@ -26,6 +30,7 @@ def center_loc(size, imagesize):
 	dy = int( (h-ih)/2. )
 	return ( (dx, dy) )
 
+# display an image of size at location on the screen...
 def displayimage(screen, filename, size, location=(0,0)):
 		f = open(filename, 'rb')
 		print filename
@@ -35,6 +40,7 @@ def displayimage(screen, filename, size, location=(0,0)):
 		screen.blit(image, location)
 		pygame.display.flip()
 
+# flash text on the screen...
 def flashtext(duration, rate, screen, text, size, location=None):
 	bgwhite = pygame.Surface(screen.get_size())
 	bgblack = pygame.Surface(screen.get_size())
@@ -68,7 +74,7 @@ def flashtext(duration, rate, screen, text, size, location=None):
 		pygame.display.flip()
 		time.sleep(rate/2.)
 
-
+# show text on the screen...
 def showtext(screen, text, size, location=None):
 	bgwhite = pygame.Surface(screen.get_size())
 	bgwhite = bgwhite.convert()

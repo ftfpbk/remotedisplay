@@ -1,10 +1,6 @@
 #!/usr/bin/python
 # many dependencies are all brought in with this import...
 from libslideshow import *
-from random import randrange, shuffle
-from string import split,join
-import os
-import urllib2
 
 #=============================================================================
 # ==================================  MAIN  ==================================
@@ -47,20 +43,34 @@ screen = pygame.display.set_mode(size)
 pygame.mouse.set_visible(False)
 
 # define the base url to the photo booth web server
+#   this should probably be stored in a config file or put on the command line...
 baseurl = 'http://10.81.56.160/'
 
 lastone = '' 	# holds the newest image number from the web server: DSCxxxx 
 		# there is no extension to make things easier... 
 count = 0    	# index variable used to stepping 'files'
 files = []   	# holds list of images to display
+lastcmd = ''	# hold last command issued by booth central
+
 
 # play slideshow forever
 while(1):
 
+	# check for a command signal from booth central...
+	check = urllib2.urlopen(baseurl).read()
+	if 'command' in check:
+		command = urllib2.urlopen(baseurl+'command.txt').read()
+		if command <> lastcmd:
+			lastcmd = command
+			if 'reboot' in command: shellcmd('touch ~/reboot')
+			if 'shutdown' in command: shellcmd('touch ~/shutdown')
+			if 'clearcache' in command: shellcmd('rm *.jpg')
+			if 'quit' in command: sys.exit()
+
 	# check to see if a new image is ready...
 	check = urllib2.urlopen(baseurl+'lastone.txt').read()
 
-	# if there has been a change, grab the directory index...
+	# if there has been a change, grab the lastest directory index...
 	if check <> lastone:
 
 		lastone = check # the latest is the new 'lastone'...
@@ -95,7 +105,7 @@ while(1):
 
 	# increment the counter used for stepping through 'files'
 	count += 1
-	# check for the end of the list; and if it is, shuffle the file list as well
+	# check for the end of the list; and if it is, shuffle the file list as well...
 	if count == len(files): 
 		count = 0
 		print 'Shuffling file list...'
@@ -116,10 +126,6 @@ while(1):
 		if event.type == pygame.KEYDOWN: 
 			if event.key == K_q or event.key == ESCAPE: 
 				sys.exit()
-
-	# This is a place holder for other administrative functions 
-	# like shutting down or rebooting via a flag file from the web server.
-	# We still need to add in the extra images ("go to the photo booth", etc), too...
 
 	# delay time for displaying the image...
 	time.sleep(3)
