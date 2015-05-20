@@ -88,7 +88,7 @@ while(1):
 
 			# finish splitting the name
 			filename = split(i, '">')[0]
-			print 'filename:', filename
+			print 'New one: filename:', filename
 			# add to files if it's not already in there...
 			if filename not in files and 'DSC' in filename: files.append(filename)
 
@@ -97,9 +97,9 @@ while(1):
 			if lastone in filename:
 				# if it's not already local, grab the image...
 				if filename not in os.listdir(os.curdir):
-					print 'Grabbing file...', filename
+					print 'New one: Grabbing file...', filename
 					open(filename, 'wb').write(urllib2.urlopen(baseurl+'for-display/'+filename).read())
-				print 'displaying lastone ... ', filename 
+				print 'New one: displaying lastone ... ', filename 
 				displayimage (screen, filename, imagesz, imageloc )
 				time.sleep(10)
 
@@ -108,17 +108,17 @@ while(1):
 	# check for the end of the list; and if it is, shuffle the file list as well...
 	if count == len(files): 
 		count = 0
-		print 'Shuffling file list...'
+		print 'Main: Shuffling file list...'
 		shuffle(files) # so we don't always play the same order
 
 	# Finally, display the next image in the file list...
         if count < len(files): 
 		# if it's not already local, grab the image...
 		if files[count] not in os.listdir(os.curdir):
-			print 'Grabbing file...', filename
+			print 'Main: Grabbing file...', filename
 			open(files[count], 'wb').write(urllib2.urlopen(baseurl+'for-display/'+files[count]).read())
 		displayimage (screen, files[count], imagesz, imageloc )
-		print count, files[count]
+		print 'Main:', count, files[count]
 
 	# check for a signal to quit...
         for event in pygame.event.get():

@@ -33,7 +33,7 @@ def center_loc(size, imagesize):
 # display an image of size at location on the screen...
 def displayimage(screen, filename, size, location=(0,0)):
 		f = open(filename, 'rb')
-		print filename
+		print 'displayimage:', filename
 		image = pygame.image.load(f, filename)
 		imagerect = image.get_rect()
 		image = pygame.transform.scale(image, size)
