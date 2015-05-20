@@ -90,7 +90,7 @@ while(1):
 			filename = split(i, '">')[0]
 			print 'New one: filename:', filename
 			# add to files if it's not already in there...
-			if filename not in files and 'DSC' in filename: files.append(filename)
+			if filename not in files and ( 'DSC' in filename or '.png' in filename ): files.append(filename)
 
 			# if 'i' is actually the latest, then display it right now...
 			# holding it a little longer so people can see it when they come out
