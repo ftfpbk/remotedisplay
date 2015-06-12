@@ -108,7 +108,7 @@ while(1):
 					open(filename, 'wb').write(urllib2.urlopen(baseurl+'for-display/'+filename).read())
 				print 'New one: displaying lastone ... ', filename 
 				displayimage (screen, filename, imagesz, imageloc )
-				time.sleep(10)
+				time.sleep(25)
 
 	# increment the counter used for stepping through 'files'
 	count += 1
