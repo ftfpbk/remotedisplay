@@ -44,7 +44,7 @@ pygame.mouse.set_visible(False)
 
 # define the base url to the photo booth web server
 #   this should probably be stored in a config file or put on the command line...
-baseurl = 'http://10.81.56.160/'
+baseurl = split(open ('baseurl.txt', 'r').read())[0]   #'http://10.81.56.160/'
 
 lastone = '' 	# holds the newest image number from the web server: DSCxxxx 
 		# there is no extension to make things easier... 
@@ -59,13 +59,20 @@ while(1):
 	# check for a command signal from booth central...
 	check = urllib2.urlopen(baseurl).read()
 	if 'command' in check:
+		print baseurl+'command.txt'
 		command = urllib2.urlopen(baseurl+'command.txt').read()
 		if command <> lastcmd:
 			lastcmd = command
-			if 'reboot' in command: shellcmd('touch ~/reboot')
-			if 'shutdown' in command: shellcmd('touch ~/shutdown')
-			if 'clearcache' in command: shellcmd('rm *.jpg')
-			if 'quit' in command: sys.exit()
+			if 'reboot' in command: 
+				shellcmd('touch /home/debian/reboot')
+				sys.exit('Photo booth central commands: reboot')
+			if 'shutdown' in command: 
+				shellcmd('touch /home/debian/shutdown')
+				sys.exit('Photo booth central commands: shutdown')
+			if 'clearcache' in command: 
+				shellcmd('rm *.jpg')
+				print 'Photo booth central commands: clear cache'
+			if 'quit' in command: sys.exit('Photo booth central commands: quit')
 
 	# check to see if a new image is ready...
 	check = urllib2.urlopen(baseurl+'lastone.txt').read()
